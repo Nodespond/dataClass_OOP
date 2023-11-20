@@ -29,7 +29,7 @@ public:
 //default initialization
 Date() {year = 1960 ; month = 1 ; day = 1 ; hour = 0 ; minute = 0 ; second = 0 ; isOurEra = true;}
 //initialization
-Date( short int y,  short int m,  short int d , short int h, short int mm, short int s,bool isOE ) {
+Date( unsigned int y,  unsigned int m,  unsigned int d , unsigned int h, unsigned int mm, unsigned int s,bool isOE ) {
            year = y;
            month = m;
            day = d;
@@ -39,7 +39,7 @@ Date( short int y,  short int m,  short int d , short int h, short int mm, short
            isOurEra = isOE; 
         }
 //method for add date
-Date add(short int y,short int m ,short int d,short int h, short int min ,short int s){
+Date add(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s){
  Date dat;
  if (isOurEra) year += y ; 
     else year -= y;
@@ -57,7 +57,7 @@ Date add(short int y,short int m ,short int d,short int h, short int min ,short 
     return dat;
 }
 //method for substract date
-Date subtract(short int y,short int m ,short int d,short int h, short int min ,short int s){
+Date subtract(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s){
     Date dat;
  if (isOurEra) year -= y ; 
     else year += y;
