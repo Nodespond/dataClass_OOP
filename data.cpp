@@ -3,8 +3,6 @@
 //(true – наша эра, false – до нашей эры).В классе Date должны быть реализованы методы со
 // следующей сигнатурой: add/subtract(year, month, day, hour, minute, second), 
 //которые должны возвращать новый объект класса Date.
-// В классе Date должны быть перегружены следующие операторы: 
-//оператор копирования =, 
 //Датой инициализации по умолчанию должна быть 1 января 1960 года, 00 часов, 00 минут, 00 секунд.
 // Должно учитываться, что год может быть високосным.Нарисовать UML диаграмму.
 // Проверять работоспособность программы будем лично на паре!
@@ -26,6 +24,8 @@ private:
     bool isOurEra;
 
 public:
+
+int dayInM[13] = {0,31,28,31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 //default initialization
 Date() {year = 1960 ; month = 1 ; day = 1 ; hour = 0 ; minute = 0 ; second = 0 ; isOurEra = true;}
 //initialization
@@ -39,40 +39,16 @@ Date( unsigned int y,  unsigned int m,  unsigned int d , unsigned int h, unsigne
            isOurEra = isOE; 
         }
 //method for add date
-Date add(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s){
- Date dat;
- if (isOurEra) year += y ; 
-    else year -= y;
-  dat.year = year;  
-  month += m;
-  dat.month = m;
-  day += d;
-  dat.day = d;
-  hour += h;
-  dat.hour = h;
-  minute += min;
-  dat.minute = min;
-  second += s;
-  dat.second = s;
-    return dat;
+Date add(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s,bool isE){
+  Date fdata{y,m,d,h,min,s,isE};
+    *this = *this - fdata;
+    return *this;
 }
 //method for substract date
-Date subtract(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s){
-    Date dat;
- if (isOurEra) year -= y ; 
-    else year += y;
-  dat.year = year;  
-  month -= m;
-  dat.month = m;
-  day -= d;
-  dat.day = d;
-  hour -= h;
-  dat.hour = h;
-  minute -= min;
-  dat.minute = min;
-  second -= s;
-  dat.second = s;
-    return dat;
+Date subtract(unsigned int y,unsigned int m ,unsigned int d,unsigned int h, unsigned int min ,unsigned int s,bool isE){
+    Date fdata{y,m,d,h,min,s,isE};
+    *this = *this - fdata;
+    return *this;
 }
 //overload for "<<"
 friend ostream& operator<<(ostream& os,const Date& data){
@@ -193,8 +169,15 @@ Date operator + (const Date& d){
             day+=1;
         }
         day+=d.day;
-        if(day>30){
-            day-=30;
+        if(isVis(*this)){
+            dayInM[3] +=1;
+            if(day>dayInM[month]){
+            day-=dayInM[month];
+            month+=1;
+            }
+            dayInM[3] -=1;
+        } else if(day>dayInM[month]){
+            day-=dayInM[month];
             month+=1;
         }
         month+=d.month;
@@ -233,9 +216,16 @@ Date operator - (const Date& d){
             day-=1;
         }
         day-=d.day;
-        if(day<0){
-            day+=30;
-            month-=1;
+        if(isVis(*this)){
+            dayInM[3] +=1;
+            if(day<0){
+            day-=dayInM[month];
+            month+=1;
+            }
+            dayInM[3] -=1;
+        } else if(day<0){
+            day-=dayInM[month];
+            month+=1;
         }
         month-=d.month;
         if(month<0){
@@ -285,9 +275,9 @@ Date data ;
 Date data1(1960,1,1,0,0,5,true);
 data.getDate();
 data1.getDate();
-data.add(1,2,12,12,12,45);
+data.add(1,2,12,12,12,45,true);
 data.getDate();
-data.subtract(1,2,12,12,12,45);
+data.subtract(1,2,12,12,12,45,true);
 data.getDate();
 data1.getDate();
 cout<<(data1==data)<<endl;
