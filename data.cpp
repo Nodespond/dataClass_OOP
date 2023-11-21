@@ -230,7 +230,7 @@ public:
               
                 }
                 dayInM[2]-= 1;
-                if (day == 0) day = dayInM[month];
+                //if (day == 0) day = dayInM[month];
             }
             else if (day < 0) {
                 day -= dayInM[month];
